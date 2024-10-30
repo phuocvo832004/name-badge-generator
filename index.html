@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Name Badges</title>
+    <!-- Thêm Bootstrap CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container my-5 p-4 bg-white shadow rounded">
+        <h1 class="text-center mb-4">Generate Name Badges</h1>
+        
+        <!-- Khu vực upload file và các nút -->
+        <div class="upload-section text-center mb-4">
+            <input type="file" class="form-control-file mb-3" id="uploadFile" accept=".xlsx">
+            <button id="processButton" class="btn btn-primary mx-2">Process</button>
+            <button id="printButton" class="btn btn-success mx-2" onclick="window.print()">Print</button>
+        </div>
+
+        <!-- Khu vực preview -->
+        <div class="preview-section row" id="previewSection">
+            <!-- Name badges sẽ hiển thị ở đây -->
+        </div>
+    </div>
+    <script src="js/scripts.js"></script>
+</body>
+</html>
