@@ -34,7 +34,7 @@ body {
     border-radius: var(--border-radius);
     padding: var(--padding);
     box-shadow: 0 0.125rem 0.625rem var(--shadow-color);
-    max-width: 90%;
+    max-width: 100%;
     margin: 2rem auto;
 }
 
@@ -89,27 +89,7 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 1.25rem; 
-    gap: 1rem; 
-}
-
-/* style the badges */
-.badge {
-    border: 1px solid var(--border-color);
-    padding: 1.25rem;
-    width: 11.25rem; 
-    height: 6.25rem; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--container-bg-color);
-    box-shadow: 0 0.125rem 0.25rem var(--shadow-color);
-    border-radius: var(--border-radius);
-    transition: transform 0.2s ease;
-}
-
-.badge:hover {
-    transform: scale(1.05);
+    gap: 0; 
 }
 
 /* Style the print button */
@@ -139,6 +119,8 @@ h1 {
 .print-button:active {
     transform: translateX(-50%) scale(0.95); 
 }
+
+
 
 
 /* Responsive */
@@ -179,36 +161,46 @@ h1 {
 
 /* Styling cho bản in */
 @media print {
+
     body * {
-        visibility: hidden; 
+        visibility: hidden;
     }
-    #uploadSection, #title {
+    #uploadSection, #title, #printButton, #uploadSection * {
         display: none;
     }
-    
-    /* just display name badge */
-    .preview-section,
-    .preview-section * {
-        visibility: visible; 
+
+    .preview-section, .preview-section * {
+        visibility: visible;
     }
 
     .preview-section {
-        position: relative; 
+        position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        max-width: 100%; 
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
     }
 
-   
+    canvas, img {
+        width: calc(100%); 
+        height: auto;
+        max-width: 100%; 
+        page-break-after: avoid; 
+    }
+
     @page {
-        size: A4; 
-        margin: 0; 
+        size: A4;
+        margin: 0;
     }
 
     .print-button {
-        display: none; 
+        display: none;
     }
 }
+
 
 

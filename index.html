@@ -12,14 +12,24 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4" id="title">Name Badge Generator</h1>
 
-        <!-- upload section -->
-        <div class="upload-section text-center" id="uploadSection">
-            <div class="form-group">
-                <label for="fileUpload" class="form-label">Upload an Excel file (.xlsx)</label>
-                <input type="file" id="fileUpload" class="form-control-file mb-3" accept=".xlsx">
+        <div id="upload-mapping" class="text-center mt-5">
+            <!-- upload section -->
+            <div class="upload-section">
+                <h3 class="mb-4">Upload Excel File</h3>
+                <div class="form-group">
+                    <label for="fileUpload" class="form-label">Upload an Excel file (.xlsx)</label>
+                    <input type="file" id="fileUpload" class="form-control-file mb-3" accept=".xlsx">
+                </div>
+                <button id="processButton" class="btn btn-primary">Preview</button>
             </div>
-            <button id="processButton" class="btn btn-primary">Preview</button>
+        
+            <!-- mapping section -->
+            <div id="mappingSection" class="mt-4">
+                <h3>Custom Column Mapping</h3>
+                <!-- Các ô nhập liệu cho ánh xạ cột sẽ được hiển thị ở đây -->
+            </div>
         </div>
+        
 
         <!-- preview section -->
         <div class="preview-section" id="previewSection">
@@ -27,7 +37,7 @@
         </div>
 
         <!-- print button -->
-        <div class="text-center mt-4">
+        <div class="text-center mt-4" id="printButton">
             <button onclick="window.print()" class="print-button">Print Badges</button>
         </div>        
     </div>
