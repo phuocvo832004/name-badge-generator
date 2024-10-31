@@ -10,25 +10,30 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4" id="title">Name Badge Generator</h1>
+        <h1 class="text-center mb-4" id="title" style="font-size: 2.5rem; color: #007bff; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); font-weight: 800;">
+            Name Badge Generator
+        </h1>
 
-        <div id="upload-mapping" class="text-center mt-5">
-            <!-- upload section -->
-            <div class="upload-section">
-                <h3 class="mb-4">Upload Excel File</h3>
-                <div class="form-group">
-                    <label for="fileUpload" class="form-label">Upload an Excel file (.xlsx)</label>
-                    <input type="file" id="fileUpload" class="form-control-file mb-3" accept=".xlsx">
+        <div id="upload-mapping" class="container mt-5" style="background: lightblue;">
+            <div class="row justify-content-around align-items-start">
+                <!-- upload section -->
+                <div class="col-md-5 upload-section p-4 border rounded shadow bg-light">
+                    <h3 class="mb-4">Upload Excel File</h3>
+                    <div class="form-group">
+                        <label for="fileUpload" class="form-label">Upload an Excel file (.xlsx)</label>
+                        <input type="file" id="fileUpload" class="form-control mb-3" accept=".xlsx">
+                    </div>
+                    <button id="processButton" class="btn btn-primary btn-lg">Preview</button>
                 </div>
-                <button id="processButton" class="btn btn-primary">Preview</button>
-            </div>
-        
-            <!-- mapping section -->
-            <div id="mappingSection" class="mt-4">
-                <h3>Custom Column Mapping</h3>
-                <!-- Các ô nhập liệu cho ánh xạ cột sẽ được hiển thị ở đây -->
+            
+                <div id="mappingSection" class="col-md-5 p-4 border rounded shadow bg-light mt-4 mt-md-0">
+                    <h3 class="text-center">Custom Column Mapping</h3>
+                    <!-- wait until import file excel -->
+                </div>
             </div>
         </div>
+        
+        
         
 
         <!-- preview section -->

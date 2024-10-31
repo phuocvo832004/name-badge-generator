@@ -1,7 +1,7 @@
 let excelData = [];
 const imageUrl = '/assets/image2.jpg'; 
 
-// Đặt ánh xạ cột mặc định
+// default cho mapping
 const defaultColumnMapping = {
     firstName: 'First Name',
     lastName: 'Last Name',
@@ -9,7 +9,7 @@ const defaultColumnMapping = {
     company: 'Company'
 };
 
-// Lưu ánh xạ tùy chỉnh từ người dùng
+// Lưu ánh xạ custom từ user
 let customColumnMapping = { ...defaultColumnMapping };
 
 // Đặt sự kiện cho nút upload và nút process
@@ -41,39 +41,57 @@ function handleFileUpload(event) {
     reader.readAsArrayBuffer(file);
 }
 
-// Hàm để hiển thị giao diện cho người dùng nhập tên cột
 function showColumnMappingInput() {
     const mappingSection = document.getElementById("mappingSection");
     mappingSection.innerHTML = ""; // Xóa nội dung trước đó
 
+    // Tạo thẻ card cho phần ánh xạ cột
+    const card = document.createElement("div");
+    card.classList.add("card", "p-4", "shadow"); // Sử dụng Bootstrap để tạo card
+
     // Tạo tiêu đề cho phần ánh xạ cột
     const title = document.createElement("h3");
     title.textContent = "Custom Column Mapping";
-    mappingSection.appendChild(title);
+    title.classList.add("text-center")
+    card.appendChild(title);
 
     // Tạo các input cho từng cột
     for (const key in customColumnMapping) {
         const formGroup = document.createElement("div");
-        formGroup.classList.add("form-group", "text-left"); // Thêm lớp Bootstrap cho kiểu dáng
+        formGroup.classList.add("form-group", "text-left");
 
         const label = document.createElement("label");
         label.textContent = `${customColumnMapping[key]}: `;
-        label.htmlFor = key; // Thêm thuộc tính htmlFor cho label
+        label.htmlFor = key;
 
         const input = document.createElement("input");
         input.type = "text";
-        input.id = key; // Thêm id cho input để tương ứng với label
+        input.id = key;
         input.value = customColumnMapping[key];
-        input.classList.add("form-control"); // Thêm lớp Bootstrap cho ô nhập liệu
+        input.placeholder = `Nhập tên cho ${customColumnMapping[key]}`; // Thêm placeholder
+        input.classList.add("form-control");
         input.oninput = (e) => {
-            customColumnMapping[key] = e.target.value; // Cập nhật ánh xạ cột tùy chỉnh
+            customColumnMapping[key] = e.target.value;
         };
 
         formGroup.appendChild(label);
         formGroup.appendChild(input);
-        mappingSection.appendChild(formGroup);
+        card.appendChild(formGroup);
     }
+
+    // Thêm nút Apply
+    const applyButton = document.createElement("button");
+    applyButton.textContent = "Apply";
+    applyButton.classList.add("btn", "btn-success", "mt-3");
+    applyButton.onclick = () => {
+        // Xử lý logic khi nhấn nút Apply
+        processExcelData();
+    };
+
+    card.appendChild(applyButton);
+    mappingSection.appendChild(card); // Thêm thẻ card vào phần ánh xạ
 }
+
 
 
 // Hàm để xử lý dữ liệu Excel
