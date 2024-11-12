@@ -1,20 +1,20 @@
 let excelData = [];
-const imageUrl = '/assets/image2.jpg'; 
+const imageUrl = '/assets/background.jpg'; 
 
-// default cho mapping
-const defaultColumnMapping = {
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    jobTitle: 'Job Title',
-    company: 'Company'
-};
-
-// Lưu ánh xạ custom từ user
-let customColumnMapping = { ...defaultColumnMapping };
-
-// Đặt sự kiện cho nút upload và nút process
 document.getElementById("fileUpload").addEventListener("change", handleFileUpload);
 document.getElementById("processButton").addEventListener("click", processExcelData);
+document.getElementById("omitFirstRow").addEventListener("change", showColumnMappingInput); 
+
+const defaultColumnMapping = {
+    firstName: 1,
+    lastName: 2,
+    jobTitle: 3,
+    company: 4
+};
+
+let customColumnMapping = { ...defaultColumnMapping };
+
+const defaultColumnMappingValue = ["Last Name", "First Name", "Job Title", "Company"];
 
 // Hàm để xử lý upload file
 function handleFileUpload(event) {
@@ -28,79 +28,112 @@ function handleFileUpload(event) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: "array" });
         
-        // Chỉ lấy sheet đầu tiên cho đơn giản
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        // Check if "Omit First Row" is selected
+        const omitFirstRow = document.getElementById('omitFirstRow').checked;
+
+        // Chuyển sheet đầu tiên thành JSON
+        let jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+        // Nếu omitFirstRow được chọn, loại bỏ dòng đầu tiên
+        if (omitFirstRow) {
+            jsonData = jsonData.slice(1); // Loại bỏ dòng đầu tiên
+        }
+
+        // Lưu dữ liệu đã tải lên vào excelData
+        excelData = jsonData;
         
-        // Chuyển đổi sheet sang JSON
-        excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-        
-        // Hiển thị giao diện cho người dùng nhập tên cột
+        // Hiển thị giao diện ánh xạ cột
         showColumnMappingInput();
     };
     
     reader.readAsArrayBuffer(file);
 }
 
+document.getElementById("omitFirstRow").addEventListener("change", () => {
+    showColumnMappingInput();
+    
+    const omitFirstRow = document.getElementById("omitFirstRow").checked;
+    if (omitFirstRow && excelData.length > 0) {
+        excelData = excelData.slice(1); 
+    }
+});
+
 function showColumnMappingInput() {
     const mappingSection = document.getElementById("mappingSection");
-    mappingSection.innerHTML = ""; // Xóa nội dung trước đó
+    mappingSection.innerHTML = ""; 
 
-    // Tạo thẻ card cho phần ánh xạ cột
     const card = document.createElement("div");
-    card.classList.add("card", "p-4", "shadow"); // Sử dụng Bootstrap để tạo card
+    card.classList.add("card", "p-4", "shadow");
 
-    // Tạo tiêu đề cho phần ánh xạ cột
     const title = document.createElement("h3");
     title.textContent = "Custom Column Mapping";
-    title.classList.add("text-center")
+    title.classList.add("text-center");
     card.appendChild(title);
 
-    // Tạo các input cho từng cột
-    for (const key in customColumnMapping) {
+    const columnNames = ["First Name", "Last Name", "Job Title", "Company"];
+
+    columnNames.forEach((value, index) => {
         const formGroup = document.createElement("div");
         formGroup.classList.add("form-group", "text-left");
 
         const label = document.createElement("label");
-        label.textContent = `${customColumnMapping[key]}: `;
-        label.htmlFor = key;
+        label.textContent = `Map Column for ${value}: `;
+        label.htmlFor = `columnMapping${index}`;
 
-        const input = document.createElement("input");
-        input.type = "text";
-        input.id = key;
-        input.value = customColumnMapping[key];
-        input.placeholder = `Nhập tên cho ${customColumnMapping[key]}`; // Thêm placeholder
-        input.classList.add("form-control");
-        input.oninput = (e) => {
-            customColumnMapping[key] = e.target.value;
+        const select = document.createElement("select");
+        select.id = `columnMapping${index}`;
+        select.classList.add("form-control");
+
+        // Thêm các options cho dropdown (select)
+        for (let i = 0; i < columnNames.length; i++) {
+            const option = document.createElement("option");
+            option.value = i + 1;
+            option.textContent = columnNames[i];
+            select.appendChild(option);
+        }
+
+        // Set default selected value dựa trên customColumnMapping
+        select.value = customColumnMapping[columnNames[index].toLowerCase()] || (index + 1);
+
+        // Cập nhật customColumnMapping khi người dùng thay đổi lựa chọn
+        select.onchange = (e) => {
+            const selectedColumn = e.target.value;
+            if (value === "First Name") {
+                customColumnMapping.firstName = parseInt(selectedColumn);
+            } else if (value === "Last Name") {
+                customColumnMapping.lastName = parseInt(selectedColumn);
+            } else if (value === "Job Title") {
+                customColumnMapping.jobTitle = parseInt(selectedColumn);
+            } else if (value === "Company") {
+                customColumnMapping.company = parseInt(selectedColumn);
+            }
         };
 
         formGroup.appendChild(label);
-        formGroup.appendChild(input);
+        formGroup.appendChild(select);
         card.appendChild(formGroup);
-    }
+    });
 
-    // Thêm nút Apply
     const applyButton = document.createElement("button");
     applyButton.textContent = "Apply";
     applyButton.classList.add("btn", "btn-success", "mt-3");
     applyButton.onclick = () => {
-        // Xử lý logic khi nhấn nút Apply
         processExcelData();
     };
 
     card.appendChild(applyButton);
-    mappingSection.appendChild(card); // Thêm thẻ card vào phần ánh xạ
+    mappingSection.appendChild(card);
 }
-
-
 
 // Hàm để xử lý dữ liệu Excel
 function processExcelData() {
     const previewSection = document.getElementById("previewSection");
     previewSection.innerHTML = "";
 
-    const pageWidth = 595; 
-    const pageHeight = 842; 
+    const pageWidth = 595;
+    const pageHeight = 842;
 
     const usableWidth = pageWidth * 0.96;
     const usableHeight = pageHeight * 0.80;
@@ -111,8 +144,8 @@ function processExcelData() {
     const startX = pageWidth * 0.02;
     const startY = pageHeight * 0.10;
 
-    if (excelData.length > 1) {
-        const totalRows = excelData.length - 1; // Bỏ dòng tiêu đề
+    if (excelData.length > 0) {
+        const totalRows = excelData.length;
         const badgesPerPage = 6;
         const totalPages = Math.ceil(totalRows / badgesPerPage);
 
@@ -129,16 +162,15 @@ function processExcelData() {
                 context.drawImage(image, 0, 0, pageWidth, pageHeight);
 
                 for (let i = 0; i < badgesPerPage; i++) {
-                    const rowIdx = page * badgesPerPage + i + 1;
+                    const rowIdx = page * badgesPerPage + i;
                     if (rowIdx >= excelData.length) break;
 
                     const row = excelData[rowIdx];
 
-                    // Tìm chỉ số của các cột dựa trên ánh xạ cột tùy chỉnh
-                    const firstName = row[getColumnIndex(customColumnMapping.firstName, excelData[0])] || "";
-                    const lastName = row[getColumnIndex(customColumnMapping.lastName, excelData[0])] || "";
-                    const jobTitle = row[getColumnIndex(customColumnMapping.jobTitle, excelData[0])] || "";
-                    const company = row[getColumnIndex(customColumnMapping.company, excelData[0])] || "";
+                    const firstName = row[customColumnMapping.firstName - 1] || ""; 
+                    const lastName = row[customColumnMapping.lastName - 1] || "";
+                    const jobTitle = row[customColumnMapping.jobTitle - 1] || "";
+                    const company = row[customColumnMapping.company - 1] || "";
 
                     const col = i % 2;
                     const rowPos = Math.floor(i / 2);
@@ -192,8 +224,3 @@ function processExcelData() {
     }
 }
 
-// Hàm để lấy chỉ số của cột dựa trên tên cột
-function getColumnIndex(columnName, headerRow) {
-    const index = headerRow.findIndex(header => header === columnName);
-    return index >= 0 ? index : -1; // Trả về -1 nếu không tìm thấy
-}

@@ -8,40 +8,49 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/CSS/styles.css">
 </head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4" id="title" style="font-size: 2.5rem; color: #007bff; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); font-weight: 800;">
+<body class="bg-light">
+    <div class="p-4">
+        <h1 class="text-center mb-2 mt-2" id="title" style="font-size: 2.5rem; color: #007bff; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); font-weight: 800;">
             Name Badge Generator
         </h1>
 
-        <div id="upload-mapping" class="container mt-5" style="background: lightblue;">
-            <div class="row justify-content-around align-items-start">
-                <!-- upload section -->
-                <div class="col-md-5 upload-section p-4 border rounded shadow bg-light">
-                    <h3 class="mb-4">Upload Excel File</h3>
-                    <div class="form-group">
-                        <label for="fileUpload" class="form-label">Upload an Excel file (.xlsx)</label>
-                        <input type="file" id="fileUpload" class="form-control mb-3" accept=".xlsx">
+        <div id="upload-mapping" class="container mt-2" style="background: lightblue;">
+            <div class="row d-flex justify-content-around align-items-start">
+                <!-- Upload Container -->
+                <div class="col-md-5 d-flex flex-column align-items-center p-4 border rounded shadow bg-light" id="uploadContainer">
+                    <div class="upload-section w-100">
+                        <h3 class="mb-4">Upload Excel File</h3>
+
+                        <!-- Download Sample File -->
+                        <a href="assets/fake_data.xlsx" download class="btn btn-secondary mb-3">
+                            Download Sample Excel File
+                        </a>
+
+                        <div class="form-group">
+                            <label for="fileUpload" class="form-label">Upload an Excel file (.xlsx)</label>
+                            <input type="file" id="fileUpload" class="form-control mb-3" accept=".xlsx">
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="omitFirstRow" >
+                            <label class="form-check-label" for="omitFirstRow">Omit First Row</label>
+                        </div>
+                        <button id="processButton" class="btn btn-primary btn-lg">Preview</button>
                     </div>
-                    <button id="processButton" class="btn btn-primary btn-lg">Preview</button>
+        
+                    <div class="mt-4 text-center w-100">
+                        <img src="assets/sample-namebadge-gen.png" alt="Mapping Illustration" style="max-width: 80%; height: auto;">
+                    </div>
                 </div>
-            
-                <div id="mappingSection" class="col-md-5 p-4 border rounded shadow bg-light mt-4 mt-md-0">
+        
+                <div id="mappingSection" class="col-md-5 p-4 border rounded shadow bg-light">
                     <h3 class="text-center">Custom Column Mapping</h3>
-                    <!-- wait until import file excel -->
                 </div>
             </div>
         </div>
-        
-        
-        
 
-        <!-- preview section -->
         <div class="preview-section" id="previewSection">
-            <!-- the script will insert name badges to this section -->
         </div>
 
-        <!-- print button -->
         <div class="text-center mt-4" id="printButton">
             <button onclick="window.print()" class="print-button">Print Badges</button>
         </div>        

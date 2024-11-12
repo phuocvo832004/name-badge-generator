@@ -158,35 +158,20 @@ h1 {
 
 /* Styling cho bản in */
 @media print {
-
+    /* Hide all content except the canvas elements */
     body * {
         visibility: hidden;
     }
-    #uploadSection, #title, #printButton, #uploadSection * {
+
+    #uploadSection, #title, #printButton, #uploadSection *, #printButton, #upload-mapping, h1 {
         display: none;
     }
-
-    .preview-section, .preview-section * {
+    canvas {
         visibility: visible;
-    }
-
-    .preview-section {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-    }
-
-    canvas, img {
-        width: calc(100%); 
-        height: auto;
+        width: 100%; 
+        height: 100%;
         max-width: 100%; 
-        page-break-after: avoid; 
+        max-height: 100%;
     }
 
     @page {
